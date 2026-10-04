@@ -1,0 +1,1 @@
+-- Phase 0 baseline migration. Domain tables are introduced in Phase 1.

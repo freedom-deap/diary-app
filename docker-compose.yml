@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      target: development
+    command: sh -c "npx prisma generate && npm run dev"
+    environment:
+      DATABASE_URL: postgresql://diary:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/diary?schema=public
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+      NOMINATIM_BASE_URL: ${NOMINATIM_BASE_URL:-https://nominatim.openstreetmap.org}
+      NOMINATIM_USER_AGENT: ${NOMINATIM_USER_AGENT:-outing-diary/0.1 (local-development)}
+      GOOGLE_MAPS_EMBED_API_KEY: ${GOOGLE_MAPS_EMBED_API_KEY:-}
+      PHOTO_STORAGE_PATH: /app/storage/photos
+      AUTH_USERNAME: ${AUTH_USERNAME:-diary}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:?Set AUTH_PASSWORD in .env}
+      AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
+      AUTH_OWNER_ID: ${AUTH_OWNER_ID:-owner}
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - photo_data:/app/storage
+
+  db:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: diary
+      POSTGRES_USER: diary
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U diary -d diary"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  photo_data:

@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Spot {
+  id          String    @id @default(uuid()) @db.Uuid
+  ownerId     String    @db.VarChar(100)
+  name        String    @db.VarChar(120)
+  latitude    Float
+  longitude   Float
+  address     String?   @db.VarChar(300)
+  description String?
+  impression  String?
+  visitedAt   DateTime? @db.Date
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  photos      Photo[]
+  labels      SpotLabel[]
+
+  @@index([createdAt])
+  @@index([visitedAt])
+  @@index([ownerId])
+}
+
+model Label {
+  id        String      @id @default(uuid()) @db.Uuid
+  ownerId   String      @db.VarChar(100)
+  name      String      @db.VarChar(50)
+  color     String?     @db.VarChar(7)
+  createdAt DateTime    @default(now())
+  spots     SpotLabel[]
+
+  @@index([createdAt])
+  @@index([ownerId])
+  @@unique([ownerId, name])
+}
+
+model SpotLabel {
+  spotId  String @db.Uuid
+  labelId String @db.Uuid
+  spot    Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  label   Label  @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([spotId, labelId])
+  @@index([labelId])
+}
+
+model Photo {
+  id           String    @id @default(uuid()) @db.Uuid
+  spotId       String    @db.Uuid
+  storageKey   String    @unique @db.VarChar(100)
+  originalName String    @db.VarChar(255)
+  mimeType     String    @db.VarChar(100)
+  width        Int
+  height       Int
+  sortOrder    Int
+  takenAt      DateTime?
+  createdAt    DateTime  @default(now())
+  spot         Spot      @relation(fields: [spotId], references: [id], onDelete: Cascade)
+
+  @@index([spotId, sortOrder])
+  @@index([createdAt])
+}
