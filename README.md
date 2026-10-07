@@ -14,6 +14,7 @@
 ## 開発環境の起動
 
 初回起動前に`.env.example`を`.env`へコピーし、`POSTGRES_PASSWORD`、`AUTH_PASSWORD`、`AUTH_SECRET`を設定してください。
+写真を利用するには、Cloudflare R2のバケット専用APIトークンを作成し、`.env`の`R2_ACCOUNT_ID`、`R2_BUCKET_NAME`、`R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`を設定してください。通常のR2バケットでは`R2_ENDPOINT`は空欄で構いません。管轄を指定したバケットでは、その管轄用S3エンドポイントを設定します。バケットは非公開のままで利用できます。
 
 ```bash
 docker compose up --build

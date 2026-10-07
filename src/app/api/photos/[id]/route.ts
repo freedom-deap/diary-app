@@ -17,7 +17,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return new NextResponse(new Uint8Array(image), {
       headers: { "Content-Type": "image/webp", "Cache-Control": "private, max-age=86400" },
     });
-  } catch {
-    return new NextResponse("Not found", { status: 404 });
+  } catch (error) {
+    if (error instanceof Error && error.name === "NoSuchKey") return new NextResponse("Not found", { status: 404 });
+    console.error("Photo retrieval failed", error);
+    return new NextResponse("Photo storage unavailable", { status: 503 });
   }
 }
