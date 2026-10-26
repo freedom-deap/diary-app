@@ -4,6 +4,8 @@
 
 - `.env`の`AUTH_USERNAME`と`AUTH_PASSWORD`を開発用既定値から変更する
 - `AUTH_SECRET`へ32バイト以上のランダム値を設定する
+- `AUTH_LOGIN_PATH`へ`/`で始まる16文字以上の英数字・`_`・`-`のパスを設定し、編集する人だけに共有する（`/login`は使用不可）
+- 既存のスポット情報、住所、感想、写真を誰でも閲覧できる状態にしてよいか確認する
 - HTTPSのリバースプロキシまたはホスティング環境を使用する
 - PostgreSQLとR2バケットを外部公開せず、アプリからだけ接続できるようにする
 - R2の`Object Read & Write`トークンを写真用バケットのみに限定し、本番環境の秘密情報管理に登録する
@@ -17,6 +19,7 @@
 3. リリース前に`npx prisma migrate deploy`を一度実行する。
 4. `R2_ACCOUNT_ID`、`R2_BUCKET_NAME`、`R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`を設定し、既存のローカル写真があれば同じオブジェクトキーでR2へ移行する。
 5. 起動後に`GET /api/health`がHTTP 200と`database: connected`を返すことを確認する。
+6. `/`では閲覧のみ可能で、未ログインで`/manage`と`/spots/new`にアクセスすると404になることを確認する。設定した認証URLでログインし、編集画面で登録・編集できることを確認する。
 
 ## バックアップ
 

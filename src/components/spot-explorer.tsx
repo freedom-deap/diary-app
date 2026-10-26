@@ -7,8 +7,9 @@ import { SpotMap, type MapSpot } from "./spot-map";
 
 type SpotSummary = MapSpot & { visitedAt: string | null; impression: string | null; thumbnailUrl: string | null; labels: Array<{ id: string; name: string; color: string | null }> };
 
-export function SpotExplorer({ spots }: { spots: SpotSummary[] }) {
+export function SpotExplorer({ spots, editable }: { spots: SpotSummary[]; editable: boolean }) {
   const [view, setView] = useState<"list" | "map">("list");
+  const spotPath = editable ? "/manage/spots" : "/spots";
   return <section className="list-section" aria-labelledby="spot-list-title">
     <div className="section-heading">
       <div><h2 id="spot-list-title">スポット一覧</h2><span>{spots.length}件</span></div>
@@ -17,9 +18,9 @@ export function SpotExplorer({ spots }: { spots: SpotSummary[] }) {
         <button type="button" aria-pressed={view === "map"} onClick={() => setView("map")}>地図</button>
       </div> : null}
     </div>
-    {!spots.length ? <div className="empty-state"><p>まだスポットがありません。</p><Link href="/spots/new">最初の場所を記録する</Link></div> : null}
+    {!spots.length ? <div className="empty-state"><p>まだスポットがありません。</p>{editable ? <Link href="/spots/new">最初の場所を記録する</Link> : null}</div> : null}
     {spots.length && view === "list" ? <div className="spot-grid">{spots.map((spot) =>
-      <Link className="spot-card" href={`/spots/${spot.id}`} key={spot.id}>
+      <Link className="spot-card" href={`${spotPath}/${spot.id}`} key={spot.id}>
         {spot.thumbnailUrl ? <Image className="spot-thumbnail" src={spot.thumbnailUrl} alt="" width={640} height={480} unoptimized /> : null}
         <div className="spot-card-content">
         <p className="spot-date">{spot.visitedAt ?? "訪問日未設定"}</p><h3>{spot.name}</h3>
@@ -28,6 +29,6 @@ export function SpotExplorer({ spots }: { spots: SpotSummary[] }) {
         {spot.impression ? <p className="spot-excerpt">{spot.impression}</p> : null}
         </div>
       </Link>)}</div> : null}
-    {spots.length && view === "map" ? <SpotMap spots={spots} /> : null}
+    {spots.length && view === "map" ? <SpotMap spots={spots} spotPath={spotPath} /> : null}
   </section>;
 }

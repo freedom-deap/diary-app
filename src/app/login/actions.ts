@@ -15,11 +15,10 @@ export async function login(_state: LoginState, formData: FormData): Promise<Log
   (await cookies()).set(AUTH_COOKIE, await createAuthToken(username, secret), {
     httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 * 7,
   });
-  const next = String(formData.get("next") ?? "/");
-  redirect(next.startsWith("/") && !next.startsWith("//") ? next : "/");
+  redirect("/manage");
 }
 
 export async function logout() {
   (await cookies()).delete(AUTH_COOKIE);
-  redirect("/login");
+  redirect("/");
 }

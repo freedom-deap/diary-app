@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { AUTH_COOKIE, verifyAuthToken } from "./auth-token";
 
 export async function getAuthenticatedUser() {
@@ -8,11 +8,15 @@ export async function getAuthenticatedUser() {
 
 export async function requireAuthenticatedUser() {
   const username = await getAuthenticatedUser();
-  if (!username) redirect("/login");
+  if (!username) notFound();
   return username;
+}
+
+export function getOwnerId() {
+  return process.env.AUTH_OWNER_ID ?? "owner";
 }
 
 export async function requireOwnerId() {
   await requireAuthenticatedUser();
-  return process.env.AUTH_OWNER_ID ?? "owner";
+  return getOwnerId();
 }

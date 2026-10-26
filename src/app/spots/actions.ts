@@ -21,7 +21,8 @@ export async function createSpot(_state: SpotFormState, formData: FormData): Pro
   try { spot = await prisma.spot.create({ data: { ...result.data, ownerId, labels: { create: labelIds.map((labelId) => ({ labelId })) } } }); }
   catch { return { errors: { form: "スポットを保存できませんでした。時間をおいて再度お試しください。" }, values: result.values, selectedLabelIds: labelIds }; }
   revalidatePath("/");
-  redirect(`/spots/${spot.id}`);
+  revalidatePath("/manage");
+  redirect(`/manage/spots/${spot.id}`);
 }
 
 export async function updateSpot(id: string, _state: SpotFormState, formData: FormData): Promise<SpotFormState> {
@@ -36,8 +37,10 @@ export async function updateSpot(id: string, _state: SpotFormState, formData: Fo
   }
   catch { return { errors: { form: "スポットを更新できませんでした。対象が存在するか確認してください。" }, values: result.values, selectedLabelIds: labelIds }; }
   revalidatePath("/");
+  revalidatePath("/manage");
   revalidatePath(`/spots/${id}`);
-  redirect(`/spots/${id}`);
+  revalidatePath(`/manage/spots/${id}`);
+  redirect(`/manage/spots/${id}`);
 }
 
 export async function deleteSpot(id: string): Promise<void> {
@@ -48,7 +51,8 @@ export async function deleteSpot(id: string): Promise<void> {
   await prisma.spot.delete({ where: { id } });
   await Promise.all(photos.map((photo) => removeStoredPhoto(photo.storageKey)));
   revalidatePath("/");
-  redirect("/");
+  revalidatePath("/manage");
+  redirect("/manage");
 }
 
 export async function uploadPhotos(id: string, _state: PhotoUploadState, formData: FormData): Promise<PhotoUploadState> {
@@ -76,7 +80,9 @@ export async function uploadPhotos(id: string, _state: PhotoUploadState, formDat
     return { error: "写真を処理できませんでした。JPEG、PNG、WebPの正常な画像か確認してください。" };
   }
   revalidatePath("/");
+  revalidatePath("/manage");
   revalidatePath(`/spots/${id}`);
+  revalidatePath(`/manage/spots/${id}`);
   return { success: `${stored.length}枚の写真を追加しました。` };
 }
 
@@ -87,7 +93,9 @@ export async function deletePhoto(id: string, photoId: string): Promise<void> {
   await prisma.photo.delete({ where: { id: photoId } });
   await removeStoredPhoto(photo.storageKey);
   revalidatePath("/");
+  revalidatePath("/manage");
   revalidatePath(`/spots/${id}`);
+  revalidatePath(`/manage/spots/${id}`);
 }
 
 async function ownedLabelIds(ownerId: string, labelIds: string[]) {

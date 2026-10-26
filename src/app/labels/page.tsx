@@ -10,7 +10,7 @@ export default async function LabelsPage() {
   const ownerId = await requireOwnerId();
   const labels = await prisma.label.findMany({ where: { ownerId }, orderBy: { name: "asc" }, include: { _count: { select: { spots: true } } } });
   return <main className="narrow-page">
-    <Link className="back-link" href="/">← 一覧へ戻る</Link>
+    <Link className="back-link" href="/manage">← 一覧へ戻る</Link>
     <header className="page-header"><div><p className="eyebrow">LABELS</p><h1>ラベル管理</h1><p className="lead">記録を分類し、あとから探しやすくします。</p></div></header>
     <section className="detail-card"><h2>新しいラベル</h2><LabelForm action={createLabel} submitLabel="作成" /></section>
     <section className="label-list" aria-label="ラベル一覧">{labels.map((label) =>
