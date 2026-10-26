@@ -6,7 +6,7 @@ import { baseMapStyle, JAPAN_CENTER } from "@/lib/map";
 
 export type MapSpot = { id: string; name: string; latitude: number; longitude: number; address?: string | null };
 
-export function SpotMap({ spots, interactive = true }: { spots: MapSpot[]; interactive?: boolean }) {
+export function SpotMap({ spots, interactive = true, spotPath = "/spots" }: { spots: MapSpot[]; interactive?: boolean; spotPath?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
@@ -25,7 +25,7 @@ export function SpotMap({ spots, interactive = true }: { spots: MapSpot[]; inter
       if (interactive) {
         const content = document.createElement("div");
         const link = document.createElement("a");
-        link.href = `/spots/${spot.id}`;
+        link.href = `${spotPath}/${spot.id}`;
         link.textContent = spot.name;
         link.className = "map-popup-link";
         content.append(link);
@@ -37,6 +37,6 @@ export function SpotMap({ spots, interactive = true }: { spots: MapSpot[]; inter
     }
     if (spots.length > 1) map.fitBounds(bounds, { padding: 60, maxZoom: 14 });
     return () => map.remove();
-  }, [interactive, spots]);
+  }, [interactive, spots, spotPath]);
   return <div className="map-canvas overview-map" ref={containerRef} aria-label="登録済みスポットの地図" />;
 }

@@ -13,7 +13,7 @@
 
 ## 開発環境の起動
 
-初回起動前に`.env.example`を`.env`へコピーし、`POSTGRES_PASSWORD`、`AUTH_PASSWORD`、`AUTH_SECRET`を設定してください。
+初回起動前に`.env.example`を`.env`へコピーし、`POSTGRES_PASSWORD`、`AUTH_PASSWORD`、`AUTH_SECRET`、`AUTH_LOGIN_PATH`を設定してください。`AUTH_LOGIN_PATH`には`/`で始まる16文字以上の英数字・`_`・`-`からなる推測しにくいURLパスを設定し、編集する人だけに共有します。
 写真を利用するには、Cloudflare R2のバケット専用APIトークンを作成し、`.env`の`R2_ACCOUNT_ID`、`R2_BUCKET_NAME`、`R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`を設定してください。通常のR2バケットでは`R2_ENDPOINT`は空欄で構いません。管轄を指定したバケットでは、その管轄用S3エンドポイントを設定します。バケットは非公開のままで利用できます。
 
 ```bash
@@ -21,6 +21,9 @@ docker compose up --build
 ```
 
 - アプリ: <http://localhost:3000>
+- 閲覧画面: <http://localhost:3000/>（ログイン不要）
+- 編集画面: <http://localhost:3000/manage>（ログイン必須）
+- ログイン画面: `http://localhost:3000`に`.env`の`AUTH_LOGIN_PATH`を続けたURL
 - DB接続確認: <http://localhost:3000/api/health>
 
 地図表示にはインターネット接続が必要です。開発環境ではOpenStreetMapの標準タイルを使用しています。本番公開前に、利用規模と規約に合うタイルサービスへ切り替えてください。
@@ -57,6 +60,6 @@ docker compose run --rm app npm run build
 
 ## 環境変数
 
-Docker Composeの起動前に、`.env.example`を参考に`.env`を作成し、`POSTGRES_PASSWORD`、`AUTH_PASSWORD`、`AUTH_SECRET`を設定してください。ホストからDBへ接続する場合は、`DATABASE_URL`にも同じDBパスワードを設定します。`.env`はGitの管理対象外です。
+Docker Composeの起動前に、`.env.example`を参考に`.env`を作成し、`POSTGRES_PASSWORD`、`AUTH_PASSWORD`、`AUTH_SECRET`、`AUTH_LOGIN_PATH`を設定してください。ホストからDBへ接続する場合は、`DATABASE_URL`にも同じDBパスワードを設定します。`.env`はGitの管理対象外です。
 
 本番環境では、推測困難なDBパスワードをデプロイ先の秘密情報管理機能から設定してください。

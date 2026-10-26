@@ -21,8 +21,8 @@ export default async function EditSpotPage({ params }: { params: Promise<{ id: s
     description: spot.description ?? "", impression: spot.impression ?? "", visitedAt: spot.visitedAt?.toISOString().slice(0, 10) ?? "",
   };
   return <main className="narrow-page">
-    <Link className="back-link" href={`/spots/${spot.id}`}>← 詳細へ戻る</Link>
+    <Link className="back-link" href={`/manage/spots/${spot.id}`}>← 詳細へ戻る</Link>
     <header className="page-header"><div><p className="eyebrow">EDIT SPOT</p><h1>{spot.name}を編集</h1></div></header>
-    <SpotForm action={updateSpot.bind(null, spot.id)} initialValues={values} submitLabel="変更を保存" cancelHref={`/spots/${spot.id}`} labels={labels} initialLabelIds={spot.labels.map((item) => item.labelId)} />
+    <SpotForm action={updateSpot.bind(null, spot.id)} initialValues={values} submitLabel="変更を保存" cancelHref={`/manage/spots/${spot.id}`} labels={labels} initialLabelIds={spot.labels.map((item) => item.labelId)} />
   </main>;
 }

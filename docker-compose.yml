@@ -19,6 +19,7 @@ services:
       AUTH_USERNAME: ${AUTH_USERNAME:-diary}
       AUTH_PASSWORD: ${AUTH_PASSWORD:?Set AUTH_PASSWORD in .env}
       AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
+      AUTH_LOGIN_PATH: ${AUTH_LOGIN_PATH:?Set AUTH_LOGIN_PATH in .env}
       AUTH_OWNER_ID: ${AUTH_OWNER_ID:-owner}
     ports:
       - "3000:3000"
