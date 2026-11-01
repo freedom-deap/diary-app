@@ -2,6 +2,8 @@
 
 出かけたスポットを写真、位置、感想、ラベルとともに保存するWebアプリです。フェーズ4まで完了し、フェーズ5のローカル実装と自動テストまで完了しています。
 
+TOPページの「管理者の自己紹介」から`/about`を開けます。公開する自己紹介文は`src/app/about/page.tsx`の`profile`で編集できます。
+
 デプロイ、バックアップ、復元、監視については[`docs/deployment-and-operations.md`](docs/deployment-and-operations.md)を参照してください。
 
 ## 必要なもの

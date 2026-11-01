@@ -10,7 +10,7 @@ afterEach(() => vi.unstubAllEnvs());
 describe("public viewer and private editor routing", () => {
   it("allows public pages and photo reads without a session", async () => {
     vi.stubEnv("AUTH_LOGIN_PATH", loginPath);
-    for (const path of ["/", "/spots/spot-id", "/api/photos/photo-id"]) {
+    for (const path of ["/", "/about", "/profile-avatar.png", "/spots/spot-id", "/api/photos/photo-id"]) {
       const response = await proxy(new NextRequest(`http://localhost:3000${path}`));
       expect(response.status).toBe(200);
     }
