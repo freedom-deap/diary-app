@@ -27,7 +27,11 @@ export async function HomeView({ searchParams, editable }: {
     <main>
       <header className="page-header home-header">
         <div><p className="eyebrow">OUTING DIARY</p><h1>出かけた場所を、あとから辿れる記録に。</h1><p className="lead">場所の情報と、その日に感じたことをひとつにまとめます。</p></div>
-        {editable ? <div className="header-actions"><LogoutForm /><Link className="button secondary" href="/">閲覧画面</Link><Link className="button secondary" href="/labels">ラベル管理</Link><Link className="button primary" href="/spots/new">スポットを追加</Link></div> : null}
+        <div className="header-actions">
+          <Link className="button secondary" href="/about">管理者の自己紹介</Link>
+          <Link className="button secondary" href="/about#photo-rights">写真・画像について</Link>
+          {editable ? <><LogoutForm /><Link className="button secondary" href="/">閲覧画面</Link><Link className="button secondary" href="/labels">ラベル管理</Link><Link className="button primary" href="/spots/new">スポットを追加</Link></> : null}
+        </div>
       </header>
       <form className="search-form" action={basePath}>
         <label>キーワード<input name="q" defaultValue={query} placeholder="スポット名・感想" /></label>

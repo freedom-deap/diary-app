@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
     return new NextResponse("Not found", { status: 404 });
   }
   if (request.method === "GET" && (
-    path === "/" || (path !== "/spots/new" && /^\/spots\/[^/]+$/.test(path)) || /^\/api\/photos\/[^/]+$/.test(path)
+    path === "/" || path === "/about" || path === "/profile-avatar.png" || (path !== "/spots/new" && /^\/spots\/[^/]+$/.test(path)) || /^\/api\/photos\/[^/]+$/.test(path)
   )) return NextResponse.next();
   if (!loginPath) return new NextResponse("Not found", { status: 404 });
   const username = await verifyAuthToken(request.cookies.get(AUTH_COOKIE)?.value, process.env.AUTH_SECRET);
